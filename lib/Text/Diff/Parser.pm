@@ -1,5 +1,5 @@
 package Text::Diff::Parser;
-# $Id: Parser.pm,v 1.3 2006/04/13 01:47:37 fil Exp $
+# $Id: Parser.pm 154 2006-11-09 19:29:38Z fil $
 
 use 5.00404;
 use strict;
@@ -8,7 +8,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -238,7 +238,6 @@ sub _parse_line
         my $name = $self->_filename( $1 );
         $self->{verbose} and warn "Unified diff";
         push @{ $self->{changes} }, bless {
-                            type=>'',
                             filename1=>$name,
                             timestamp1=>$stamp,
                         }, 'Text::Diff::Parser::Change';
@@ -290,15 +289,15 @@ sub _unified_line
 
     my $change = $self->{changes}[-1];
     if( $line =~ /^\+\+\+ (.+?)\t(.+)$/ or 
-            $line =~ /^\+\+\+ ([^\s]+)\s+(.+)$/) {
-        $change->{timestamp2} = $2;
+            $line =~ /^\+\+\+ ([^\s]+)\s+(.+)$/ ) {
+        $change->{timestamp2} = ($2||'');
         $change->{filename2} = $self->_filename( $1 );
         $change->{lines} = [];
         return;
     }
     die "Missing +++ line before $line" unless $change->{filename2};
-    if( $line =~ /^\@\@ -(\d+),(\d+) [+](\d+),(\d+) \@\@$/ ) {
-        my @match = ($1, $2, $3, $4);
+    if( $line =~ /^\@\@ -(\d+)(?:,(\d+))? [+](\d+)(?:,(\d+))? \@\@$/ ) {
+        my @match = ($1, ($2||0), $3, ($4||0));
         if( @{ $change->{lines} } ) {
             $change = $self->_new_chunk;
         }
@@ -308,7 +307,7 @@ sub _unified_line
         return;
     }
     die "Missing \@\@ line before $line at $self->{state}{context}\n" 
-                        unless $change->{line1};
+                        unless defined $change->{line1};
 
     if( $line =~ /^([-+ ])(.*)$/) {
         my( $mod, $text ) = ( $1, $2 );
@@ -663,13 +662,4 @@ at your option, any later version of Perl 5 you may have available.
 
 =cut
 
-
-$Log: Parser.pm,v $
-Revision 1.3  2006/04/13 01:47:37  fil
-Tweak
-
-Revision 1.2  2006/04/13 01:43:27  fil
-Tweak for move coverage
-Add coverage stanza to Makefile.PL
-Added BUGS and SEE ALSO section
 

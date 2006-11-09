@@ -2,8 +2,8 @@ diff -urb DBIx-Abstract-1.005/Abstract.pm dbix-abstract/Abstract.pm
 --- DBIx-Abstract-1.005/Abstract.pm	2003-02-17 22:28:48.000000000 -0500
 +++ dbix-abstract/Abstract.pm	2004-04-04 19:31:31.000000000 -0400
 @@ -1,16 +1,25 @@
--# $Id: dbix-abstract.patch,v 1.1.1.1 2006/04/13 01:20:07 fil Exp $
-+# $Id: dbix-abstract.patch,v 1.1.1.1 2006/04/13 01:20:07 fil Exp $
+-# $Id: dbix-abstract.patch 118 2006-04-13 01:20:06Z fil $
++# $Id: dbix-abstract.patch 118 2006-04-13 01:20:06Z fil $
  package DBIx::Abstract;
  
  use DBI;
@@ -14,7 +14,7 @@ diff -urb DBIx-Abstract-1.005/Abstract.pm dbix-abstract/Abstract.pm
 +use vars qw($has_weaken);
  BEGIN {
 -  $DBIx::Abstract::VERSION = '1.005';
--  ($DBIx::Abstract::CVSVERSION) = q$Revision: 1.1.1.1 $ =~ /(\d+\.[\d.]+)/;
+-  ($DBIx::Abstract::CVSVERSION) = q$Revision: 118 $ =~ /(\d+\.[\d.]+)/;
 +    eval {
 +        require Scalar::Util;
 +        Scalar::Util->import('weaken');
@@ -25,10 +25,10 @@ diff -urb DBIx-Abstract-1.005/Abstract.pm dbix-abstract/Abstract.pm
 +
 +BEGIN {
 +  $DBIx::Abstract::VERSION = '1.006';
-+  ($DBIx::Abstract::CVSVERSION) = q$Revision: 1.1.1.1 $ =~ /(\d+\.[\d.]+)/;
++  ($DBIx::Abstract::CVSVERSION) = q$Revision: 118 $ =~ /(\d+\.[\d.]+)/;
    ($DBIx::Abstract::LAST_CHANGE) =
--    q$Date: 2006/04/13 01:20:07 $ =~ /(\d+\/\S+ \d+:\S+)/;
-+    q$Date: 2006/04/13 01:20:07 $ =~ /(\d+\/\S+ \d+:\S+)/;
+-    q$Date: 2006-04-12 21:20:06 -0400 (Wed, 12 Apr 2006) $ =~ /(\d+\/\S+ \d+:\S+)/;
++    q$Date: 2006-04-12 21:20:06 -0400 (Wed, 12 Apr 2006) $ =~ /(\d+\/\S+ \d+:\S+)/;
  }
  
  sub ___drivers {

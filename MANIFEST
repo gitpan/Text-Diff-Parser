@@ -3,6 +3,7 @@ Makefile.PL
 MANIFEST
 README
 lib/Text/Diff/Parser.pm
+scripts/cover-diff
 t/00_compile.t
 t/10_ctor.t
 t/15_accessor.t
@@ -14,4 +15,8 @@ t/std-2.diff
 t/std-more.diff
 t/tripple.diff
 t/dbix-abstract.patch
+t/svn-one-line.diff
+t/one-line.diff
+t/zero-line.diff
+t/svn-zero-line.diff
 META.yml                                 Module meta-data (added by MakeMaker)

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: 30_simplify.t,v 1.1.1.1 2006/04/13 01:20:07 fil Exp $
+# $Id: 30_simplify.t 124 2006-04-13 01:58:08Z fil $
 use strict;
 
 use Test::More tests => 3;

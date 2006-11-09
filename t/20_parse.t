@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: 20_parse.t,v 1.2 2006/04/13 01:43:27 fil Exp $
+# $Id: 20_parse.t 154 2006-11-09 19:29:38Z fil $
 use strict;
 
-use Test::More tests => 5;
+use Test::More tests => 9;
 
 use Text::Diff::Parser;
 
@@ -10,6 +10,7 @@ use Text::Diff::Parser;
 my $parser = Text::Diff::Parser->new( Verbose => 0 );
 
 my @tests = (
+
     {   file => 't/std-more.diff',
         desc => "Standard diff, many files",
         result => [
@@ -265,13 +266,49 @@ my @tests = (
               size      => 3,
               type      => ''
             },
+        ],
 
-
-],
-    
+    },
+    {   file => 't/one-line.diff',
+        desc => "Unified diff, zero vs one line",
+        result => [
+            { filename1 => '/dev/null', line1 => 0,
+              filename2 => 'one-line', line2 => 1,
+              size      => 1,
+              type      => 'ADD'
+            },
+        ],
+    },
+    {   file => 't/svn-one-line.diff',
+        desc => "Unified diff, zero vs one line, from subversion",
+        result => [
+            { filename1 => 'local/CPAN/SVN-Web/branches/svn-client/lib/SVN/Web/I18N.pm', line1 => 0,
+              filename2 => 'local/CPAN/SVN-Web/branches/svn-client/lib/SVN/Web/I18N.pm', line2 => 1,
+              size      => 2,
+              type      => 'ADD'
+            },
+        ],
+    },
+    {   file => 't/zero-line.diff',
+        desc => "Unified diff, one line vs zero",
+        result => [
+            { filename1 => 'one-line', line1 => 1,
+              filename2 => 'zero-line', line2 => 0,
+              size      => 1,
+              type      => 'REMOVE'
+            },
+        ],
+    },
+    {   file => 't/svn-zero-line.diff',
+        desc => "Unified diff, one line vs zero, from subversion",
+        result => [
+            { filename1 => 't/svn-one-line.diff', line1 => 0,
+              filename2 => 't/svn-one-line.diff', line2 => 1,
+              size      => 7,
+              type      => 'ADD'
+            },
+        ],
     }
-
-
 );
 
 foreach my $test ( @tests ) {

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: 10_ctor.t,v 1.1.1.1 2006/04/13 01:20:07 fil Exp $
+# $Id: 10_ctor.t 118 2006-04-13 01:20:06Z fil $
 use strict;
 
 use Test::More ( tests => 21 );
