@@ -1,5 +1,8 @@
 Revision history for Perl extension Text::Diff::Parser.
 
+0.04 Thu Nov 09 2006
+    - Spelling correction!
+
 0.03 Thu Nov 09 2006
     - Can now handle diffs that contain 0 length files.  
         Thank you Nik Clayton
@@ -12,4 +15,4 @@ Revision history for Perl extension Text::Diff::Parser.
 	- original version
 
 
-# $Id: Changes 154 2006-11-09 19:29:38Z fil $
+# $Id: Changes 155 2006-11-09 19:32:41Z fil $

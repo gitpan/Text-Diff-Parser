@@ -1,5 +1,5 @@
 package Text::Diff::Parser;
-# $Id: Parser.pm 154 2006-11-09 19:29:38Z fil $
+# $Id: Parser.pm 155 2006-11-09 19:32:41Z fil $
 
 use 5.00404;
 use strict;
@@ -8,7 +8,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -408,7 +408,7 @@ __END__
 
 =head1 NAME
 
-Text::Diff::Parserr - Parse patch files containing unified and standard diffs
+Text::Diff::Parser - Parse patch files containing unified and standard diffs
 
 =head1 SYNOPSIS
 
