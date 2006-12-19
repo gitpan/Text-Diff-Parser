@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: 20_parse.t 154 2006-11-09 19:29:38Z fil $
+# $Id: 20_parse.t 193 2006-12-19 13:45:18Z fil $
 use strict;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use Text::Diff::Parser;
 
@@ -308,6 +308,35 @@ my @tests = (
               type      => 'ADD'
             },
         ],
+    },
+    {   file => 't/kernel-sub.diff',
+        desc => "Unified diff, no timestamps, function name, from kernel.org",
+        result => [
+            { filename1 => 'a/kernel/sys.c', line1 => 1983,
+              filename2 => 'b/kernel/sys.c', line2 => 1983,
+              size      => 3,
+              function  => 'asmlinkage long sys_prctl(int option, uno',
+              type      => ''
+            },
+            { filename1 => 'a/kernel/sys.c', line1 => 1986,
+              filename2 => 'b/kernel/sys.c', line2 => 1986,
+              size      => 1,
+              function  => 'asmlinkage long sys_prctl(int option, uno',
+              type      => 'REMOVE'
+            },
+            { filename1 => 'a/kernel/sys.c', line1 => 1987,
+              filename2 => 'b/kernel/sys.c', line2 => 1986,
+              size      => 1,
+              function  => 'asmlinkage long sys_prctl(int option, uno',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/kernel/sys.c', line1 => 1987,
+              filename2 => 'b/kernel/sys.c', line2 => 1987,
+              size      => 3,
+              type      => '',
+              function  => 'asmlinkage long sys_prctl(int option, uno'
+            },
+        ],
     }
 );
 
@@ -329,9 +358,12 @@ sub compare_changes
 
     my $q1 = 0;
     foreach my $ch ( @$got ) {
-        foreach my $f ( qw(filename1 line1 size filename2 line2) ) {
+        foreach my $f ( qw(filename1 line1 size filename2 line2 function) ) {
             my $v = $ch->can($f)->($ch);
-            unless( $expected->[$q1]{$f} eq $v ) {
+            $v = '' unless defined $v;
+            my $ex = $expected->[$q1]{$f};
+            $ex = '' unless defined $ex;
+            unless( $ex eq $v ) {
                 my_fail( $text, $ch, $expected, $q1, $f, $v );
                 return;
             }
@@ -355,5 +387,5 @@ sub my_fail
     $v ||= '';
     diag ( "     \$got->[$q1]->$f = $v" );
     diag ( "\$expected->[$q1]{$f} = $expected->[$q1]{$f}" );
-    diag ( join "\n", $ch->text );
+    # diag ( join "\n", $ch->text );
 }

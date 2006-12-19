@@ -1,5 +1,10 @@
 Revision history for Perl extension Text::Diff::Parser.
 
+0.05 Tue Dec 19 2006
+    - Added support for timestampless diffs and function names in @@ lines
+      as used by kernel.org
+        Thank you Nelson Elhage
+
 0.04 Thu Nov 09 2006
     - Spelling correction!
 
@@ -15,4 +20,4 @@ Revision history for Perl extension Text::Diff::Parser.
 	- original version
 
 
-# $Id: Changes 155 2006-11-09 19:32:41Z fil $
+# $Id: Changes 194 2006-12-19 13:51:18Z fil $

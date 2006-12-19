@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: 15_accessor.t 118 2006-04-13 01:20:06Z fil $
+# $Id: 15_accessor.t 194 2006-12-19 13:51:18Z fil $
 use strict;
 
-use Test::More ( tests => 5 );
+use Test::More ( tests => 20 );
 use Text::Diff::Parser;
 use IO::File;
 
@@ -40,3 +40,30 @@ is( $changes, 21, "21 changes to Abstract.pm" );
 
 $changes = $parser->changes( 't/2-dbix-abstract.t' );
 is( $changes, 13, "13 changes to t/2-dbix-abstract.t" );
+
+
+##########
+$parser = Text::Diff::Parser->new( {File=>$file2} );
+
+my @changes = $parser->changes( 'dbix-abstract/Abstract.pm' );
+
+my $c = $changes[0];
+is( $c->filename1, 'DBIx-Abstract-1.005/Abstract.pm', 'filename1' );
+is( $c->filename2, 'dbix-abstract/Abstract.pm', 'filename2' );
+is( $c->line1, 1, 'line1' );
+is( $c->line2, 1, 'line2' );
+is( $c->size, 1, 'size' );
+is( $c->type, 'REMOVE', 'type' );
+
+$c = $changes[8];
+is( $c->filename1, 'DBIx-Abstract-1.005/Abstract.pm', 'filename1' );
+is( $c->filename2, 'dbix-abstract/Abstract.pm', 'filename2' );
+is( $c->line1, 12, 'line1' );
+is( $c->line2, 10, 'line2' );
+is( $c->size, 11, 'size' );
+is( $c->type, 'ADD', 'type' );
+
+my @lines = $c->text;
+is( 0+@lines, 11, 'text()' );
+is( $lines[0], '    eval {' );
+is( $c->text(0), '    eval {', 'text(0)' );

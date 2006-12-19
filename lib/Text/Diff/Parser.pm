@@ -1,5 +1,5 @@
 package Text::Diff::Parser;
-# $Id: Parser.pm 155 2006-11-09 19:32:41Z fil $
+# $Id: Parser.pm 193 2006-12-19 13:45:18Z fil $
 
 use 5.00404;
 use strict;
@@ -8,7 +8,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -232,7 +232,8 @@ sub _parse_line
         $self->{verbose} and warn "Standard diff line1=$1 line2=$2";
     }
     elsif( $line =~ /^--- (.+?)\t(.+)$/ or 
-            $line =~ /^--- ([^\s]+)\s+(.+)$/) {
+            $line =~ /^--- ([^\s]+)\s+(.+)$/ or
+            $line =~ /^--- ([^\s]+)$/ ) {           # kernel.org style
         $state->{unified} = 1;
         my $stamp = $2;
         my $name = $self->_filename( $1 );
@@ -289,19 +290,20 @@ sub _unified_line
 
     my $change = $self->{changes}[-1];
     if( $line =~ /^\+\+\+ (.+?)\t(.+)$/ or 
-            $line =~ /^\+\+\+ ([^\s]+)\s+(.+)$/ ) {
+            $line =~ /^\+\+\+ ([^\s]+)\s+(.+)$/ or
+            $line =~ /^\+\+\+ ([^\s]+)$/ ) {           # kernel.org style
         $change->{timestamp2} = ($2||'');
         $change->{filename2} = $self->_filename( $1 );
         $change->{lines} = [];
         return;
     }
     die "Missing +++ line before $line" unless $change->{filename2};
-    if( $line =~ /^\@\@ -(\d+)(?:,(\d+))? [+](\d+)(?:,(\d+))? \@\@$/ ) {
-        my @match = ($1, ($2||0), $3, ($4||0));
+    if( $line =~ /^\@\@ -(\d+)(?:,(\d+))? [+](\d+)(?:,(\d+))? \@\@\s*(.+)?$/ ) {
+        my @match = ($1, ($2||0), $3, ($4||0), ($5||''));
         if( @{ $change->{lines} } ) {
             $change = $self->_new_chunk;
         }
-        @{ $change }{ qw( line1 size1 line2 size2 ) } = @match;
+        @{ $change }{ qw( line1 size1 line2 size2 function ) } = @match;
         $change->{at1} = $change->{line1};
         $change->{at2} = $change->{line2};
         return;
@@ -332,6 +334,7 @@ sub _new_type
                                     line2 => $change->{at2},
                                     at1 => $change->{at1},
                                     at2 => $change->{at2},
+                                    function => $change->{function},
                                     type => $mod,
                                     lines => []
                                 }, 'Text::Diff::Parser::Change';
@@ -381,6 +384,7 @@ sub filename1 { $_[0]->{filename1} }
 sub filename2 { $_[0]->{filename2} }
 sub line1 { $_[0]->{line1} }
 sub line2 { $_[0]->{line2} }
+sub function { $_[0]->{function} }
 sub size  { 0+@{$_[0]->{lines}} }
 
 sub type  
