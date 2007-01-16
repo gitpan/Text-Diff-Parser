@@ -1,5 +1,5 @@
 package Text::Diff::Parser;
-# $Id: Parser.pm 193 2006-12-19 13:45:18Z fil $
+# $Id: Parser.pm 195 2007-01-16 00:14:49Z fil $
 
 use 5.00404;
 use strict;
@@ -8,7 +8,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.05';
+$VERSION = '0.06';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
