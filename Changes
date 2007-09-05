@@ -1,5 +1,9 @@
 Revision history for Perl extension Text::Diff::Parser.
 
+0.07 Wed Aug 5 2007
+    - Patch for multi-file diffs that don't have diff file1 file2 lines
+        Thank you Max Kanat-Alexander
+
 0.06 Mon Jan 15 2007
     - Forgot t/kernel-sub.diff in MANIFEST
         Thank you Nik Clayton

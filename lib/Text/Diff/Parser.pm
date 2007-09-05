@@ -8,7 +8,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.06';
+$VERSION = '0.07';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -239,8 +239,8 @@ sub _parse_line
         my $name = $self->_filename( $1 );
         $self->{verbose} and warn "Unified diff";
         push @{ $self->{changes} }, bless {
-                            filename1=>$name,
-                            timestamp1=>$stamp,
+                            filename1   => $name,
+                            timestamp1  => $stamp,
                         }, 'Text::Diff::Parser::Change';
     }
     elsif( $line =~ /^\*\*\* (.+?)\t(.+)$/ or 
@@ -311,7 +311,12 @@ sub _unified_line
     die "Missing \@\@ line before $line at $self->{state}{context}\n" 
                         unless defined $change->{line1};
 
-    if( $line =~ /^([-+ ])(.*)$/) {
+    if( $line =~ /^---/ ) {
+        $self->{state}{unified} = 0;
+        return;
+    }
+
+    if( $line =~ /^([-+ ])(.*)?$/) {
         my( $mod, $text ) = ( $1, $2 );
         $mod = $types{$mod};
         $self->_new_line( $mod, $text );

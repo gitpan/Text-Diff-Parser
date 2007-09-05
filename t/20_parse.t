@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: 20_parse.t 193 2006-12-19 13:45:18Z fil $
+# $Id: 20_parse.t 267 2007-09-05 18:45:39Z fil $
 use strict;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Text::Diff::Parser;
 
@@ -10,7 +10,6 @@ use Text::Diff::Parser;
 my $parser = Text::Diff::Parser->new( Verbose => 0 );
 
 my @tests = (
-
     {   file => 't/std-more.diff',
         desc => "Standard diff, many files",
         result => [
@@ -126,7 +125,7 @@ my @tests = (
               type      => ''
             },
         ],
-        desc   => "Unified diff.  Only one in file"
+        desc   => "Unified diff,  Only one in file"
     },
     {   file => 't/double.diff',
         result => [
@@ -161,10 +160,10 @@ my @tests = (
               type      => ''
             },
         ],
-        desc   => "Unified diff.  2 in file"
+        desc   => "Unified diff,  2 in file"
     },
     {   file => 't/tripple.diff',
-        desc => "Unified diff.  3 chunks",
+        desc => "Unified diff,  3 chunks",
         result => [
             # 0..2
             { filename1 => 'lib/POE/Component/Generic.pm', line1 => 1,
@@ -337,7 +336,171 @@ my @tests = (
               function  => 'asmlinkage long sys_prctl(int option, uno'
             },
         ],
-    }
+    },
+    {
+        file => 't/mercurial.diff',
+        desc => 'Unified diff from Mercurial, no diff file1 file2 line',
+        result => [
+            { filename1 => 'a/config.ini', line1 => 32,
+              filename2 => 'b/config.ini', line2 => 32,
+              size      => 3,
+              function  => 'static_files =',
+              type      => ''
+            },
+            { filename1 => 'a/config.ini', line1 => 35,
+              filename2 => 'b/config.ini', line2 => 35,
+              size      => 1,
+              function  => 'static_files =',
+              type      => 'REMOVE'
+            },
+            { filename1 => 'a/config.ini', line1 => 36,
+              filename2 => 'b/config.ini', line2 => 35,
+              size      => 1,
+              function  => 'static_files =',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/config.ini', line1 => 36,
+              filename2 => 'b/config.ini', line2 => 36,
+              size      => 3,
+              function  => 'static_files =',
+              type      => ''
+            },
+
+
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 274,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 274,
+              size      => 3,
+              function  => 'class Issue:',
+              type      => ''
+            },
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 277,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 277,
+              size      => 1,
+              function  => 'class Issue:',
+              type      => 'REMOVE',
+            },
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 278,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 277,
+              size      => 1,
+              function  => 'class Issue:',
+              type      => 'ADD',
+            },
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 278,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 278,
+              size      => 3,
+              function  => 'class Issue:',
+              type      => ''
+            },
+            
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 301,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 301,
+              size      => 3,
+              function  => 'class Workpackage(Issue):',
+              type      => ''
+            },
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 304,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 304,
+              size      => 1,
+              function  => 'class Workpackage(Issue):',
+              type      => 'REMOVE'
+            },
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 305,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 304,
+              size      => 1,
+              function  => 'class Workpackage(Issue):',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/extensions/timelogs/timelog.py', line1 => 305,
+              filename2 => 'b/extensions/timelogs/timelog.py', line2 => 305,
+              size      => 3,
+              function  => 'class Workpackage(Issue):',
+              type      => ''
+            },
+
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 178,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 178,
+              size      => 3,
+              function  => 'class TimelogList:',
+              type      => ''
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 181,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 181,
+              size      => 1,
+              function  => 'class TimelogList:',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 181,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 182,
+              size      => 3,
+              function  => 'class TimelogList:',
+              type      => ''
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 184,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 185,
+              size      => 1,
+              function  => 'class TimelogList:',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 184,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 186,
+              size      => 3,
+              function  => 'class TimelogList:',
+              type      => ''
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 187,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 189,
+              size      => 1,
+              function  => 'class TimelogList:',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 187,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 190,
+              size      => 4,
+              function  => 'class TimelogList:',
+              type      => ''
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 191,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 194,
+              size      => 3,
+              function  => 'class TimelogList:',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/extensions/timelogs/timeloglist.py', line1 => 191,
+              filename2 => 'b/extensions/timelogs/timeloglist.py', line2 => 197,
+              size      => 3,
+              function  => 'class TimelogList:',
+              type      => ''
+            },
+
+
+            { filename1 => 'a/html/issue.item.html', line1 => 157,
+              filename2 => 'b/html/issue.item.html', line2 => 157,
+              size      => 3,
+              function  => 'python:db.remote_event.classhelp(\'id,con',
+              type      => ''
+            },
+            { filename1 => 'a/html/issue.item.html', line1 => 160,
+              filename2 => 'b/html/issue.item.html', line2 => 160,
+              size      => 1,
+              function  => 'python:db.remote_event.classhelp(\'id,con',
+              type      => 'REMOVE'
+            },
+            { filename1 => 'a/html/issue.item.html', line1 => 161,
+              filename2 => 'b/html/issue.item.html', line2 => 160,
+              size      => 1,
+              function  => 'python:db.remote_event.classhelp(\'id,con',
+              type      => 'ADD'
+            },
+            { filename1 => 'a/html/issue.item.html', line1 => 161,
+              filename2 => 'b/html/issue.item.html', line2 => 161,
+              size      => 3,
+              function  => 'python:db.remote_event.classhelp(\'id,con',
+              type      => ''
+            },
+
+        ],
+    },
+
 );
 
 foreach my $test ( @tests ) {
@@ -365,6 +528,8 @@ sub compare_changes
             $ex = '' unless defined $ex;
             unless( $ex eq $v ) {
                 my_fail( $text, $ch, $expected, $q1, $f, $v );
+                use Data::Dumper;
+                die Dumper $ch;
                 return;
             }
         }

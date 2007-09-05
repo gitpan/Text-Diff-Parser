@@ -20,4 +20,5 @@ t/one-line.diff
 t/zero-line.diff
 t/svn-zero-line.diff
 t/kernel-sub.diff
+t/mercurial.diff
 META.yml                                 Module meta-data (added by MakeMaker)
