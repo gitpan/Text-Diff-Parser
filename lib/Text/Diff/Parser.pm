@@ -8,7 +8,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.07';
+$VERSION = '0.08';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -456,7 +456,7 @@ Text::Diff::Parser - Parse patch files containing unified and standard diffs
         print "Type: ", $change->type;
         my $size = $change->size;
         foreach my $line ( 0..($size-1) ) {
-            print "Line: ", $change->line( $size );
+            print "Line: ", $change->text( $line );
         }
     }
 
@@ -636,10 +636,10 @@ Number of lines affected by this operation.
 
 =head2 text
 
-    @lines = $ch->text;
     $line  = $ch->text( $N );
+    @lines = $ch->text;
 
-Fetch the text of the line C<$N> if present or all lines of affected by this
+Fetch the text of the line C<$N> if present or all lines affected by this
 operation.  For C<''> (null) and C<'REMOVE'> operations, these are the lines
 present before the operation was done (C<'from-file'>.  For C<'ADD'> and
 C<'MODIFY'> operations, these are the lines present after the operation was
