@@ -1,8 +1,8 @@
 --- #YAML:1.0
 name:                Text-Diff-Parser
-version:             0.08
+version:             0.0900
 abstract:            Parse patches containing unified and standard diffs
-license:             ~
+license:             perl
 generated_by:        ExtUtils::MakeMaker version 6.36
 distribution_type:   module
 requires:     

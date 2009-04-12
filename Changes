@@ -1,5 +1,11 @@
 Revision history for Perl extension Text::Diff::Parser.
 
+0.0900 Apr 12 2009
+    - Kwalitee tweaks
+
+0.08 Nov 28 2007 
+    - CPAN upload
+
 0.07 Wed Aug 5 2007
     - Patch for multi-file diffs that don't have diff file1 file2 lines
         Thank you Max Kanat-Alexander
@@ -28,4 +34,4 @@ Revision history for Perl extension Text::Diff::Parser.
 	- original version
 
 
-# $Id: Changes 195 2007-01-16 00:14:49Z fil $
+# $Id: Changes 437 2009-04-12 06:50:19Z fil $

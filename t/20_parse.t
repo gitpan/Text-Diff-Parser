@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: 20_parse.t 267 2007-09-05 18:45:39Z fil $
+# $Id: 20_parse.t 364 2009-04-03 07:44:43Z fil $
 use strict;
 
 use Test::More tests => 11;

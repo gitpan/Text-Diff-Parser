@@ -1,14 +1,15 @@
 package Text::Diff::Parser;
-# $Id: Parser.pm 195 2007-01-16 00:14:49Z fil $
+# $Id: Parser.pm 437 2009-04-12 06:50:19Z fil $
 
 use 5.00404;
 use strict;
+use warnings;
 use vars qw( $VERSION );
 
 use Carp;
 use IO::File;
 
-$VERSION = '0.08';
+$VERSION = '0.0900';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -600,7 +601,19 @@ patch file.  If C<$file> is specified, only returns changes to that file
 Elements of the returned array are change objects, as described in 
 C<CHANGE METHODS> below.
 
+=head2 simplify
 
+    $parser->simplify;
+
+Simplifies the diff.  Removes no-change lines.  Combine line substitutions.
+Automatically called if you supply Simplify to ->new().
+
+=head2 source
+
+    my $file = $parser->source
+
+Returns the filename of the last file that was parsed.  Returns "user
+filehandle" if you supplied a file handle.
 
 
 =head1 CHANGE METHODS

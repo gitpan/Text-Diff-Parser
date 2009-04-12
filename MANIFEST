@@ -5,6 +5,8 @@ README
 lib/Text/Diff/Parser.pm
 scripts/cover-diff
 t/00_compile.t
+t/01_pod.t
+t/02_pod_coverage.t
 t/10_ctor.t
 t/15_accessor.t
 t/20_parse.t
