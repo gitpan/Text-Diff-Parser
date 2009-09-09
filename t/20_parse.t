@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: 20_parse.t 364 2009-04-03 07:44:43Z fil $
+# $Id: 20_parse.t 530 2009-09-09 10:26:49Z fil $
 use strict;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Text::Diff::Parser;
 
@@ -500,7 +500,23 @@ my @tests = (
 
         ],
     },
-
+    {   file => 't/mysql.diff',
+        desc => "Unified diff, remove a line with --",
+        result => [
+            { filename1 => 'oxi_room_counts.sql', line1 => 2,
+              filename2 => 'oxi_room_counts.sql', line2 => 2,
+              size      => 4,
+              function  => '',
+              type      => 'REMOVE'
+            },
+            { filename1 => 'oxi_room_counts.sql', line1 => 6,
+              filename2 => 'oxi_room_counts.sql', line2 => 2,
+              size      => 1,
+              function  => '',
+              type      => 'ADD'
+            },
+        ],
+    }
 );
 
 foreach my $test ( @tests ) {
@@ -511,7 +527,9 @@ foreach my $test ( @tests ) {
         die "HONK";
     }
     my $res = [$parser->changes];
-    compare_changes($res, $test->{result}, $test->{desc} );
+#    use Data::Dumper;
+    compare_changes($res, $test->{result}, $test->{desc} )
+#            or die Dumper $res;
 }
 
 

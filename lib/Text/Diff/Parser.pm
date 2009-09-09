@@ -1,5 +1,5 @@
 package Text::Diff::Parser;
-# $Id: Parser.pm 437 2009-04-12 06:50:19Z fil $
+# $Id: Parser.pm 530 2009-09-09 10:26:49Z fil $
 
 use 5.00404;
 use strict;
@@ -9,7 +9,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.0900';
+$VERSION = '0.1000';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
@@ -50,6 +50,8 @@ sub __init
     $self->{verbose}  = 1 if $parms->{Verbose};
     $self->{simplify} = $parms->{Simplify};
     $self->{strip}    = $parms->{Strip};
+    $self->{trustatat} = 1;
+    $self->{trustatat} = $parms->{TrustAtAt} if exists $parms->{TrustAtAt};
 
     if( $parms->{ File } ) {
         $self->parse_file( $parms->{File} );
@@ -149,6 +151,9 @@ sub parse_file
 {
     my( $self, $file ) = @_;
 
+    local $self->{count1};
+    local $self->{count2};
+
     my $fh;
     if( ref $file ) {               # assume it's a file handle
         $self->{source} = 'user filehandle';
@@ -181,6 +186,8 @@ sub parse
     $self->{source} = "user string";
     $self->{changes}=[];
     $self->{state}={ OK=>1 };
+    local $self->{count1};
+    local $self->{count2};
 
     my $l=1;
     while( $text =~ /(.+?\n)/g ) {
@@ -235,6 +242,8 @@ sub _parse_line
     elsif( $line =~ /^--- (.+?)\t(.+)$/ or 
             $line =~ /^--- ([^\s]+)\s+(.+)$/ or
             $line =~ /^--- ([^\s]+)$/ ) {           # kernel.org style
+        $self->{count1} = 0;
+        $self->{count2} = 0;
         $state->{unified} = 1;
         my $stamp = $2;
         my $name = $self->_filename( $1 );
@@ -307,12 +316,25 @@ sub _unified_line
         @{ $change }{ qw( line1 size1 line2 size2 function ) } = @match;
         $change->{at1} = $change->{line1};
         $change->{at2} = $change->{line2};
+        $self->{count1} = 0;
+        $self->{count2} = 0;
         return;
     }
     die "Missing \@\@ line before $line at $self->{state}{context}\n" 
                         unless defined $change->{line1};
 
-    if( $line =~ /^---/ ) {
+#    use Data::Dumper;
+#    die "No size1 in ", Dumper $change unless defined $change->{size1};
+#    die "No size2 in ", Dumper $change unless defined $change->{size2};
+#    warn "$change->{size1} > $self->{count1} $change->{size2} > $self->{count2}";
+
+    my $done = 1;
+    if( $self->{trustatat} and ( $change->{size1} > $self->{count1} or
+                                 $change->{size2} > $self->{count2} ) ) {
+        $done = 0;
+    }
+
+    if( $done and $line =~ /^---/ ) {
         $self->{state}{unified} = 0;
         return;
     }
@@ -338,6 +360,8 @@ sub _new_type
                                     filename2 => $change->{filename2},
                                     line1 => $change->{at1},
                                     line2 => $change->{at2},
+                                    size1 => $change->{size1},
+                                    size2 => $change->{size2},
                                     at1 => $change->{at1},
                                     at2 => $change->{at2},
                                     function => $change->{function},
@@ -363,6 +387,9 @@ sub _new_chunk
 sub _new_line
 {
     my( $self, $mod, $text ) = @_;
+
+    $self->{count1}++ if $mod ne 'ADD';
+    $self->{count2}++ if $mod ne 'REMOVE';
 
     $self->{verbose} and warn "_new_line";
     my $change = $self->{changes}[-1];
@@ -551,6 +578,15 @@ remove) of the same size on the same lines into a modify operation.
 Strip N leading directories from all filenames.  Less then useful for
 standard diffs produced by C<cvs diff>, because they don't contain directory
 information.
+
+=item TrustAtAt
+
+In a unified diff, various chunks are introduced with @@.  By default, we
+trust these to reference the right line count.  If you set this to 0, the
+lines will not be trust and a chunk must end with another @@ line or ---
+(which introduces a new file).  Note that not trusting @@ means you can not
+parse a diff that removes a line that begins with --, because that also
+start with '---'.
 
 =item Verbose
 
