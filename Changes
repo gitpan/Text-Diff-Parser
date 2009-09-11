@@ -1,5 +1,13 @@
 Revision history for Perl extension Text::Diff::Parser.
 
+0.1001 Sep 11 2009
+    - AUGH!  Forget to put t/mysql.diff in MANIFEST
+
+0.1000 Sep 10 2009
+    - Added check for -- at begining of line.  
+        Thank you Jay
+        
+
 0.0900 Apr 12 2009
     - Kwalitee tweaks
 
@@ -34,4 +42,4 @@ Revision history for Perl extension Text::Diff::Parser.
 	- original version
 
 
-# $Id: Changes 437 2009-04-12 06:50:19Z fil $
+# $Id: Changes 533 2009-09-11 11:27:06Z fil $

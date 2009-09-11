@@ -9,7 +9,7 @@ use vars qw( $VERSION );
 use Carp;
 use IO::File;
 
-$VERSION = '0.1000';
+$VERSION = '0.1001';
 $VERSION = eval $VERSION;  # see L<perlmodstyle>
 
 ####################################################
